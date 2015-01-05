@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>PMX博客</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <#include "/include/link_css.ftl">
+    <#include "/include/link_js.ftl">
+    <script src="${rc.contextPath}/js/details.js"></script>
+</head>
+
+<body>
+    <header class="navbar navbar-fixed-top">
+    <section class="title">
+        <div class="container">
+            <div class="row-fluid">
+                <div class="span6">
+                    <h3>博客</h3>
+                </div>
+                 <div class="span6">
+                    <ul class="breadcrumb pull-right">
+                       <#if loginUser??>
+                        <li>
+                            <h5>欢迎你 ，${loginUser.name}</h5>
+                        </li>
+                        <li class="login">
+                            <a href="add"><h5>发布文章</h5></a>
+                        </li>
+                        <#else>
+                        <li class="login">
+                            <a href="user/login"><h5>登录</h5></a>
+                        </li>
+                        </#if>
+                       
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    </header>
+    <!-- / .title --> 
+
+    <section id="about-us" class="container">
+        <div class="row-fluid">
+            <div class="span8">
+                <div class="blog">
+                    <#if article??>
+                    <div class="blog-item well">
+                        <a href="#"><h2>${article.title}</h2></a>
+                        <div class="blog-meta clearfix">
+                            <p class="pull-left">
+                              <i class="icon-user"></i> by <a href="#">${article.user.name}</a> | <i class="icon-calendar"></i> ${article.time?date}|<i class="icon-heart"></i><a href="#" title="喜欢"><span id="star">${article.star}</span></a>
+
+                          </p>
+
+                          <p class="pull-right"><i class="icon-comment pull"></i> <a href="#comments">${article.comments?size} 条评论</a></p>
+                      </div>
+                     
+                      <p>${article.content}</p>
+        
+        
+                        <input type="text"  id="articleId"  value="${article.articleId}" style='Visibility:hidden'>
+                          <input type="text"  id="toUser"  value="${article.user.name}" style='Visibility:hidden'>
+
+                    <div class="btn-group" >
+                    <button type="button" class="btn btn-success btn-large btn-block" onclick="star()" id="likebtn">&nbsp;&nbsp;<i class="icon-heart"></i>&nbsp;&nbsp;喜欢&nbsp;&nbsp;</button>
+
+                    </div>
+                    <p>&nbsp;<hr></p>
+                   
+                  
+                               
+                           
+                    <div id="comments" class="comments">
+
+                        <h4>${article.comments?size} 条评论</h4>
+                        <div class="comments-list">
+                            <#list article.comments?sort_by("time")?reverse as c>
+                            <#if c.isRecomment == 0>
+                             <div class="comment media">
+                                <div class="pull-left">
+                                    <img class="avatar" src="${rc.contextPath}/images/sample/cAvatar1.jpg" alt="" />  
+                                </div>
+                                <div class="media-body">
+                                    <strong>来自  <a href="#" id="commentauthor${c.commentId}">${c.fromUser}</a></strong><br>
+                                    <small>${c.time?datetime}</small><br>
+                                    <p>@<a>${c.toUser}</a> &nbsp;&nbsp;${c.content}</p>
+                                     <input type="text"  id="commentId"  value="{c.commentId}" style='Visibility:hidden'>
+                                   
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse${c.commentId}" aria-expanded="false" aria-controls="collapseTwo"><i class="glyphicon glyphicon-share-alt"></i> 回复</a>
+                                   
+                                    <div id="collapse${c.commentId}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                        <input type="text" id="recommentInput${c.commentId}" class="form-control" value="" required="required"   placeholder="请输入回复...">
+                                        
+                                        <button type="button" class="btn btn-sm btn-primary pull-right" style="margin-top: 4px" onclick="recomment(${c.commentId})">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <#else>
+                            <div class="comment media">
+                                <div class="pull-left">
+                                    <img class="avatar" src="${rc.contextPath}/images/sample/cAvatar1.jpg" alt="" />  
+                                </div>
+
+                                <div class="media-body">
+                                    <strong>来自  <a href="#">${c.fromUser}</a></strong><br>
+                                    <small>${c.time?datetime}</small><br>
+                                    <p>@<a>${c.toUser}</a> &nbsp;&nbsp;${c.content}</p>
+                                     <input type="text"  id="commentId"  value="{c.commentId}" style='Visibility:hidden'>
+                                   
+
+                                </div>
+
+                            </div>
+                            </#if>
+                            </#list>
+                            
+                        </div>
+                        </#if>
+                        <!-- Start Comment Form -->
+                        <div class="comment-form">
+                            <h4>发布评论</h4>
+                            <p class="muted"></p>
+                            <form name="comment-form" id="comment-form">
+                                <div class="row-fluid">
+                                    <div class="span4">
+                                        <input type="text"  required="required" class="input-block-level" placeholder="昵称" id="fromUser" />
+                                    </div>
+                                </div>
+                                <textarea rows="10"  id="content" required="required" class="input-block-level" placeholder="说点什么吧..."></textarea>
+                                <button type="button" class="btn btn-large btn-primary" onclick="comment()">评论</button>
+                            </form>
+                        </div>
+                        <!-- End Comment Form -->
+
+                    </div>
+
+                </div>
+                <!-- End Blog Item -->
+
+            </div>
+        </div>
+        <aside class="span4">
+            
+            <!-- /.search -->
+
+
+            <div class="widget widget-popular">
+                <h3>最受欢迎的文章</h3>
+                <div class="widget-blog-items">
+                    <#if top5 ??>
+                    <#list top5 as t>
+                    <#if t??>
+                    <div class="widget-blog-item media">
+                        <div class="pull-left">
+                            <div class="date">
+                                <span class="month">${t.time?date}</span>
+                                
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <a href="details?articleId=${t.articleId}"><h5>${t.title}</h5></a>
+                        </div>
+                    </div>
+                    </#if>
+                    </#list>
+                    </#if>
+
+
+                   
+
+                    
+
+                </div>                        
+            </div>
+            <!-- End Popular Posts -->         
+
+        </aside>
+    </div>
+
+</section>
+<!--Footer-->
+<footer id="footer">
+  <#include "/include/footer.ftl">
+</footer>
+<!--/Footer-->
+
+</body>
+</html>

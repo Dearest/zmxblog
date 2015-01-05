@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd" [
+<!ENTITY contextInclude SYSTEM "org/springframework/web/context/WEB-INF/contextInclude.xml">
+]>
+
+
+<beans>
+	<bean id="userDao" class="com.iotu.pmx.dao.impl.UserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="userSerivce" class="com.iotu.pmx.service.impl.UserSerivceImpl">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	
+	<bean id="articleDao" class="com.iotu.pmx.dao.impl.ArticleDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="articleService" class="com.iotu.pmx.service.impl.ArticleServiceImpl">
+		<property name="articleDao" ref="articleDao"></property>
+	</bean>
+	
+	<bean id="commentDao" class="com.iotu.pmx.dao.impl.CommentDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="commentService" class="com.iotu.pmx.service.impl.CommentServiceImpl">
+		<property name="commentDao" ref="commentDao"></property>
+	</bean>
+	
+	
+	<bean id="pictureDao" class="com.iotu.pmx.dao.impl.PictureDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="pictureService" class="com.iotu.pmx.service.impl.PictureServiceImpl">
+		<property name="pictureDao" ref="pictureDao"></property>
+	</bean>
+</beans>
