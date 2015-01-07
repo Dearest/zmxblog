@@ -7,17 +7,14 @@
     <!--[if lt IE 9]>
     <script src="js/modernizr.js"></script>
     <![endif]-->
+        <script src="${rc.contextPath}/js/jquery.min.js"></script>
+          <script src="${rc.contextPath}/js/details.js"></script>
   </head>
   <body>
     <header>
       <nav id="nav">
         <ul>
           <li><a href="/">网站首页</a></li>
-          <li><a href="/web/"  target="_blank">关于我们</a></li>
-          <li><a href="/jstt/" target="_blank">我们的故事</a></li>
-          <li><a href="/news/s/" target="_blank">程序生活</a></li>
-          <li><a href="/newstalk/" target="_blank">我们的博客</a></li>
-          <li><a href="/news/jsex/" target="_blank">联系我们</a></li>
           <li><input type="text" class="form-control"><button type="submit" class="btn btn-default">搜索</button></li>
         </ul>
         <script src="js/silder.js"></script><!--获取当前页导航 高亮显示标题-->
@@ -40,14 +37,14 @@
         <section class="newpic">
           <h2>最新照片</h2>
           <ul>
-            <li><a href="/"><img src="images/s1.jpg"></a></li>
-            <li><a href="/"><img src="images/s2.jpg"></a></li>
-            <li><a href="/"><img src="images/s3.jpg"></a></li>
-            <li><a href="/"><img src="images/s4.jpg"></a></li>
-            <li><a href="/"><img src="images/s5.jpg"></a></li>
-            <li><a href="/"><img src="images/s6.jpg"></a></li>
-            <li><a href="/"><img src="images/s7.jpg"></a></li>
-            <li><a href="/"><img src="images/s8.jpg"></a></li>
+            <li><a href="/"><img src="${rc.contextPath}/images/s1.jpg"></a></li>
+            <li><a href="/"><img src="${rc.contextPath}/images/s2.jpg"></a></li>
+            <li><a href="/"><img src="${rc.contextPath}/images/s3.jpg"></a></li>
+            <li><a href="/"><img src="${rc.contextPath}/images/s4.jpg"></a></li>
+            <li><a href="/"><img src="${rc.contextPath}/images/s5.jpg"></a></li>
+            <li><a href="/"><img src="${rc.contextPath}/images/s6.jpg"></a></li>
+            <li><a href="/"><img src="${rc.contextPath}/images/s7.jpg"></a></li>
+            <li><a href="/"><img src="${rc.contextPath}/images/s8.jpg"></a></li>
           </ul>
         </section>
         <section class="taglist">
@@ -61,37 +58,39 @@
         </section>
       </aside>
       <div class="blogitem">
+      <#if article??>
         <article>
-          <h2 class="title"><a href="/">心之逆旅，华胥为引</a></h2>
+          <h2 class="title"><a href="/">${article.title}</a></h2>
           <ul class="text">
-            <p>若用生命换一个过往完美的幻境，你可否答应？</p>
-            <p>对某些人而言，世界的倾塌只需要那么轻轻一句话，无奈痛苦的现实，难以承受的痛，不如只求在梦中得到一个圆满。</p>
-            
-            <p>以命易梦，轻叹悲欢离合一场戏，黄梁之后，尚剩几何？</p>
-            <p>华胥一引，乱世成殇。</p>
-            <p class="textimg"><img src="images/2.jpeg"></p>
-            <p>这是一个发生在乱世的奇幻故事。城破之日，叶蓁以身殉国，依靠鲛珠死而复生时，她只是一个“轻若尘埃，一拂即逝”的君禹山君拂。而他两年后再次与她相遇时,用的也不是陈国世子苏誉的身份，他只是一个被她救下的蓝衣公子。当她弹起华胥调，便生死人肉白骨，探入梦境与回忆。</p>
-            <p>幻术构成的曲谱里，尽是人世的辛酸与苦涩。而她与他一次一次于幻境中相遇，身份两重，缘也两重。清平华胥调，能不能让每个人追回旧日的思念，不再悲伤？</p>
+            <p>${article.content}</p>
           </ul>
-          <div class="textfoot">
-            <a href="/">阅读全文</a><a href="/">评论</a><a href="/">转载</a>
-          </div>
+            <input type="text"  id="articleId"  value="${article.articleId}" style='Visibility:hidden'>
+            <input type="text"  id="toUser"  value="${article.user.name}" style='Visibility:hidden'>
         </article>
+        </#if>
         <article>
           <form role="form">
             <div class="form-group" style="margin-top:20px;margin-left:50px">
-              <textarea class="form-control" rows="2" style="width:612px;height:40px"></textarea>
+              <input type="text"  id="fromUser"  value="匿名" style='Visibility:hidden'>
+              <textarea class="form-control" rows="2" style="width:612px;height:40px" id="content" required="required" placeholder="说点什么吧..."></textarea>
             </div>
           </form>
           
-          <button style="margin-left:595px;width:62px;height:26px ; background-color:#FFC09F"><font color="#FFF">评论</font></button>
+          <button style="margin-left:595px;width:62px;height:26px ; background-color:#FFC09F"  onclick="comment()"><font color="#FFF">评论</font></button>
           <h2></h2>
           <table style="margin-left:80px">
+          <#if article.comments ??>
+          <#list article.comments as c>
+          <#if c??>
             <tr>
+             <input type="text"  id="commentId"  value="{c.commentId}" style='Visibility:hidden'>
               <td><img src="images/s3.jpg" width="40px" height="40px"></td>
-              <td>lalala:</td>
-              <td>棒棒棒</td>
+              <td><a href="#" id="commentauthor${c.commentId}">${c.fromUser}</a>:<a>@${c.toUser}</a> </td>
+              <td>${c.content}</td>
             </tr>
+            </#if>
+            </#list>
+            </#if>
           </table>
         </article>
       </div>
